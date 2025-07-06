@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT-тренажёр для собеседований</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        ym(103196049, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/103196049" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -831,13 +849,32 @@
     document.getElementById('paymentForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Отправляем событие в Яндекс.Метрику
-        if (typeof ym !== 'undefined') {
-            ym(103196049, 'reachGoal', 'PAY_CLICK');
-            console.log('Событие PAY_CLICK отправлено в Яндекс.Метрику');
-        } else {
-            console.warn('Яндекс.Метрика не загружена');
+        // Ждём полной загрузки Яндекс.Метрики
+        function sendMetrikaEvent() {
+            if (typeof ym !== 'undefined') {
+                try {
+                    ym(103196049, 'reachGoal', 'PAY_CLICK');
+                    console.log('✅ Событие PAY_CLICK отправлено в Яндекс.Метрику');
+                } catch (error) {
+                    console.error('❌ Ошибка отправки события:', error);
+                }
+            } else if (window.Ya && window.Ya._metrika && window.Ya._metrika.counters) {
+                // Альтернативный способ
+                const counter = window.Ya._metrika.counters[103196049];
+                if (counter) {
+                    counter.reachGoal('PAY_CLICK');
+                    console.log('✅ Событие PAY_CLICK отправлено через Ya._metrika');
+                }
+            } else {
+                console.warn('⚠️ Яндекс.Метрика ещё не загружена');
+            }
         }
+
+        // Пробуем отправить сразу
+        sendMetrikaEvent();
+
+        // И через секунду на всякий случай
+        setTimeout(sendMetrikaEvent, 1000);
 
         const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
         const expiry = document.getElementById('expiry').value;
@@ -876,6 +913,17 @@
     function closeModal() {
         document.getElementById('errorModal').classList.add('hidden');
     }
+
+    // Дополнительная проверка загрузки метрики при загрузке страницы
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            if (typeof ym !== 'undefined') {
+                console.log('✅ Яндекс.Метрика успешно загружена');
+            } else {
+                console.warn('⚠️ Яндекс.Метрика не обнаружена после загрузки страницы');
+            }
+        }, 2000);
+    });
 </script>
 
 </body>
