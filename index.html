@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT-тренажёр для собеседований</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: #1a1a1a;
+        }
+
+        body {
+            background: #1a1a1a;
+        }
+
+        .accent-text {
+            color: #3B82F6;
+        }
+
+        .btn-primary {
+            background: #3B82F6;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: #2563EB;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .card-dark {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            transition: all 0.2s ease;
+        }
+
+        .card-dark:hover {
+            border-color: #3B82F6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+        }
+
+        .option-card {
+            background: #2a2a2a;
+            border: 2px solid #3a3a3a;
+            transition: all 0.2s ease;
+        }
+
+        .option-card:hover:not(:disabled) {
+            border-color: #3B82F6;
+            background: #333333;
+        }
+
+        .option-card:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .success-bg {
+            background: #10B981 !important;
+            border-color: #10B981 !important;
+        }
+
+        .error-bg {
+            background: #EF4444 !important;
+            border-color: #EF4444 !important;
+        }
+
+        input {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        input::placeholder {
+            color: #6b6b6b;
+        }
+
+        .progress-bar {
+            background: #2a2a2a;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #3B82F6;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Reviews carousel styles */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .review-card {
+            min-width: 100%;
+            padding: 0 20px;
+        }
+
+        @media (min-width: 768px) {
+            .review-card {
+                min-width: 50%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .review-card {
+                min-width: 33.333%;
+            }
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            color: #ffffff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .carousel-nav.prev {
+            left: 20px;
+        }
+
+        .carousel-nav.next {
+            right: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #3a3a3a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .carousel-dot.active {
+            background: #3B82F6;
+            width: 24px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-gray-100 antialiased">
+
+<!-- Hero Block -->
+<section id="hero" class="flex items-center justify-center px-4 py-24 md:py-32">
+    <div class="text-center max-w-4xl mx-auto">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6 text-white">
+            Не <span class="accent-text">проваливай</span><br>
+            собеседования
+        </h1>
+        <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+            100+ вопросов, чтобы узнать свой уровень и получить фидбек от экспертов
+        </p>
+        <button onclick="scrollToTest()" class="btn-primary text-white text-lg px-8 py-4 rounded-lg font-semibold">
+            Начать подготовку →
+        </button>
+    </div>
+</section>
+
+<!-- Demo Test Block -->
+<section id="test" class="py-20 px-4">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-4 text-white">
+            Выбери роль и пройди тест
+        </h2>
+        <p class="text-lg text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+            Реальные вопросы с собеседований в топовых IT-компаниях
+        </p>
+
+        <!-- Role Selection -->
+        <div id="roleSelection" class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-12">
+            <button onclick="startTest('pm')" class="card-dark p-8 rounded-lg text-center group">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-500 transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-white">Project Manager</h3>
+                <p class="text-gray-400">Agile, MVP, метрики продукта</p>
+            </button>
+
+            <button onclick="startTest('sa')" class="card-dark p-8 rounded-lg text-center group">
+                <div class="w-16 h-16 mx-auto mb-4 bg-blue-600 rounded-lg flex items-center justify-center text-white group-hover:bg-blue-500 transition-colors">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2 text-white">System Analyst</h3>
+                <p class="text-gray-400">UML, Use Cases, проектирование</p>
+            </button>
+        </div>
+
+        <!-- Test Container -->
+        <div id="testContainer" class="hidden max-w-3xl mx-auto">
+            <div class="card-dark p-8 rounded-lg">
+                <div class="flex items-center justify-between mb-8">
+                    <span id="progress" class="text-lg font-medium text-gray-300">Вопрос 1/2</span>
+                    <div class="flex gap-2">
+                        <div class="progress-bar w-24">
+                            <div class="progress-fill w-1/2"></div>
+                        </div>
+                        <div class="progress-bar w-24">
+                            <div class="progress-fill w-0"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="questionArea"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Block -->
+<section class="py-20 px-4">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-4 text-white">
+            Зачем тебе наш тренажёр?
+        </h2>
+        <p class="text-lg text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+            Мы знаем, как проходят собеседования в лучших компаниях
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="card-dark p-8 rounded-lg text-center">
+                <div class="w-16 h-16 mx-auto mb-6 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-3 text-white">Реальные вопросы</h3>
+                <p class="text-gray-400">Собрали базу из топ-компаний: Яндекс, Сбер, Тинькофф, EPAM</p>
+            </div>
+
+            <div class="card-dark p-8 rounded-lg text-center">
+                <div class="w-16 h-16 mx-auto mb-6 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-3 text-white">Мгновенный фидбек</h3>
+                <p class="text-gray-400">Объяснения от экспертов, которые сами проводят собесы</p>
+            </div>
+
+            <div class="card-dark p-8 rounded-lg text-center">
+                <div class="w-16 h-16 mx-auto mb-6 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold mb-3 text-white">Уверенность</h3>
+                <p class="text-gray-400">Не будешь бояться на реальном интервью</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Social Proof Block -->
+<section class="py-20 px-4">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-12 text-white">
+            Нам доверяют
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="text-center">
+                <div class="card-dark p-12 rounded-lg">
+                    <div class="text-6xl font-bold accent-text mb-4">500+</div>
+                    <p class="text-lg text-gray-300 font-medium">пользователей</p>
+                    <p class="text-gray-400">готовились через наш тренажёр</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <div class="card-dark p-12 rounded-lg">
+                    <div class="text-6xl font-bold accent-text mb-4">300+</div>
+                    <p class="text-lg text-gray-300 font-medium">вопросов</p>
+                    <p class="text-gray-400">для реальной практики</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Reviews Block -->
+<section class="py-20 px-4">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-4 text-white">
+            Отзывы наших пользователей
+        </h2>
+        <p class="text-lg text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+            Реальные истории успеха от тех, кто прошёл собеседования
+        </p>
+
+        <div class="carousel-container relative">
+            <div class="carousel-track" id="reviewsTrack">
+                <!-- Review 1 -->
+                <div class="review-card">
+                    <div class="card-dark p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                АК
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Александр Козлов</h4>
+                                <p class="text-sm text-gray-400">PM в Яндексе</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Прошёл собес с первого раза! Вопросы реально те же, что спрашивали.</p>
+                        <div class="flex mt-4 text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="review-card">
+                    <div class="card-dark p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                МП
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Мария Петрова</h4>
+                                <p class="text-sm text-gray-400">System Analyst в Сбере</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Очень помог блок про UML. На собесе спросили про State Machine — я знала ответ благодаря тренажёру.</p>
+                        <div class="flex mt-4 text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="review-card">
+                    <div class="card-dark p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                ДС
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Дмитрий Соколов</h4>
+                                <p class="text-sm text-gray-400">Junior PM в Тинькофф</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Без опыта устроился джуном! Тренажёр дал базу, которой не было на курсах. Рекомендую!</p>
+                        <div class="flex mt-4 text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 4 -->
+                <div class="review-card">
+                    <div class="card-dark p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                ЕВ
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Екатерина Волкова</h4>
+                                <p class="text-sm text-gray-400">Business Analyst в EPAM</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Фидбек после ответов - топ! Сразу понимаешь, где ошибся. Прошла 5 собесов, получила 3 оффера.</p>
+                        <div class="flex mt-4 text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 5 -->
+                <div class="review-card">
+                    <div class="card-dark p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                ИН
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Игорь Новиков</h4>
+                                <p class="text-sm text-gray-400">Product Owner в Ozon</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">490 рублей - копейки за такую подготовку. Повысил зарплату на 40% после смены работы.</p>
+                        <div class="flex mt-4 text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 6 -->
+                <div class="review-card">
+                    <div class="card-dark p-6 rounded-lg h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                                АБ
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Анна Белова</h4>
+                                <p class="text-sm text-gray-400">SA в VK</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300">Use Cases, диаграммы, REST - всё разложено по полочкам. Готовилась неделю, прошла с первого раза!</p>
+                        <div class="flex mt-4 text-yellow-400">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <button class="carousel-nav prev" onclick="moveCarousel(-1)">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button class="carousel-nav next" onclick="moveCarousel(1)">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Dots indicator -->
+        <div class="carousel-dots" id="carouselDots"></div>
+
+        <!-- Creators info -->
+        <div class="mt-16 text-center">
+            <p class="text-gray-400 mb-4">Создатели тренажёра:</p>
+            <div class="flex justify-center gap-8">
+                <a href="https://instagram.com/faizov_tm" target="_blank" class="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                    </svg>
+                    @faizov_tm
+                </a>
+                <a href="https://instagram.com/das.jora" target="_blank" class="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.405a1.44 1.44 0 112.881.001 1.44 1.44 0 01-2.881-.001z"/>
+                    </svg>
+                    @das.jora
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Block -->
+<section id="cta" class="py-20 px-4">
+    <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-semibold mb-4 text-white">
+            Полный доступ всего за <span class="accent-text">490₽</span>
+        </h2>
+        <p class="text-lg text-gray-400 mb-10">Это дешевле, чем кофе в Старбаксе</p>
+
+        <form id="paymentForm" class="card-dark p-8 rounded-lg">
+            <div class="mb-6">
+                <input type="text" id="cardNumber" placeholder="Номер карты" maxlength="19"
+                       class="w-full px-6 py-4 rounded-lg text-lg">
+            </div>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5"
+                       class="px-6 py-4 rounded-lg text-lg">
+                <input type="text" id="cvc" placeholder="CVC" maxlength="3"
+                       class="px-6 py-4 rounded-lg text-lg">
+            </div>
+            <div class="mb-8">
+                <input type="email" id="email" placeholder="E-mail" required
+                       class="w-full px-6 py-4 rounded-lg text-lg">
+            </div>
+            <button type="submit" class="w-full btn-primary text-white text-lg px-8 py-4 rounded-lg font-semibold">
+                Оплатить и начать →
+            </button>
+
+            <div class="mt-8 flex items-center justify-center gap-4 text-gray-500 text-sm">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                </svg>
+                <span>Безопасная оплата • SSL-шифрование</span>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Error Modal -->
+<div id="errorModal" class="fixed inset-0 z-50 hidden">
+    <div class="modal-backdrop fixed inset-0" onclick="closeModal()"></div>
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full relative z-10 border border-gray-700">
+            <div class="flex items-center mb-4">
+                <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-white">Ошибка оплаты</h3>
+            </div>
+            <p class="text-gray-300 mb-6">Ошибка при проведении платежа. Попробуйте позже или оставьте почту — мы сообщим, когда заработает.</p>
+            <button onclick="closeModal()" class="w-full py-3 px-6 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                Закрыть
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Test data
+    const questions = {
+        pm: [
+            {
+                question: "Что такое MVP и зачем он нужен?",
+                options: [
+                    "Most Valuable Player — лучший сотрудник в команде",
+                    "Minimum Viable Product — продукт с минимальным набором функций для тестирования гипотез",
+                    "Maximum Value Point — точка максимальной ценности продукта",
+                    "Main Vision Plan — основной план развития продукта"
+                ],
+                correct: 1,
+                explanation: "MVP (Minimum Viable Product) — это версия продукта с минимально достаточным набором функций для проверки основных гипотез."
+            },
+            {
+                question: "Какой фреймворк используется для приоритизации фич по 4 параметрам?",
+                options: [
+                    "RICE (Reach, Impact, Confidence, Effort)",
+                    "BREAD (Budget, Resources, Estimation, Agile, Design)",
+                    "PASTA (Planning, Analysis, Strategy, Testing, Automation)",
+                    "SOUP (Scope, Objectives, Users, Performance)"
+                ],
+                correct: 0,
+                explanation: "RICE — популярный фреймворк приоритизации: Reach, Impact, Confidence, Effort."
+            }
+        ],
+        sa: [
+            {
+                question: "Что описывает Use Case в системном анализе?",
+                options: [
+                    "Набор тестовых сценариев для QA",
+                    "Взаимодействие актора с системой для достижения цели",
+                    "Структуру базы данных системы",
+                    "Дизайн пользовательского интерфейса"
+                ],
+                correct: 1,
+                explanation: "Use Case — это описание последовательности действий между пользователем и системой для достижения конкретной бизнес-цели."
+            },
+            {
+                question: "Какая UML-диаграмма показывает жизненный цикл объекта?",
+                options: [
+                    "Class Diagram (диаграмма классов)",
+                    "Sequence Diagram (диаграмма последовательности)",
+                    "State Machine Diagram (диаграмма состояний)",
+                    "Component Diagram (диаграмма компонентов)"
+                ],
+                correct: 2,
+                explanation: "State Machine Diagram показывает все возможные состояния объекта и переходы между ними."
+            }
+        ]
+    };
+
+    let currentRole = '';
+    let currentQuestion = 0;
+
+    // Reviews carousel
+    let currentSlide = 0;
+    let autoplayInterval;
+    const totalSlides = 6;
+    const slidesPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+
+    function initCarousel() {
+        // Create dots
+        const dotsContainer = document.getElementById('carouselDots');
+        dotsContainer.innerHTML = '';
+        const totalDots = Math.ceil(totalSlides / slidesPerView);
+
+        for (let i = 0; i < totalDots; i++) {
+            const dot = document.createElement('div');
+            dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
+            dot.onclick = () => goToSlide(i);
+            dotsContainer.appendChild(dot);
+        }
+
+        // Start autoplay
+        startAutoplay();
+    }
+
+    function updateCarousel() {
+        const track = document.getElementById('reviewsTrack');
+        const slideWidth = 100 / slidesPerView;
+        track.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+
+        // Update dots
+        const dots = document.querySelectorAll('.carousel-dot');
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === Math.floor(currentSlide / slidesPerView));
+        });
+    }
+
+    function moveCarousel(direction) {
+        const maxSlide = totalSlides - slidesPerView;
+        currentSlide = Math.max(0, Math.min(maxSlide, currentSlide + direction));
+        updateCarousel();
+
+        // Reset autoplay
+        stopAutoplay();
+        startAutoplay();
+    }
+
+    function goToSlide(dotIndex) {
+        currentSlide = dotIndex * slidesPerView;
+        updateCarousel();
+
+        // Reset autoplay
+        stopAutoplay();
+        startAutoplay();
+    }
+
+    function startAutoplay() {
+        autoplayInterval = setInterval(() => {
+            const maxSlide = totalSlides - slidesPerView;
+            if (currentSlide >= maxSlide) {
+                currentSlide = 0;
+            } else {
+                currentSlide++;
+            }
+            updateCarousel();
+        }, 5000);
+    }
+
+    function stopAutoplay() {
+        clearInterval(autoplayInterval);
+    }
+
+    // Initialize carousel on load
+    window.addEventListener('load', initCarousel);
+
+    // Reinitialize on resize
+    window.addEventListener('resize', () => {
+        const newSlidesPerView = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+        if (newSlidesPerView !== slidesPerView) {
+            location.reload(); // Simple reload for responsive changes
+        }
+    });
+
+    function scrollToTest() {
+        document.getElementById('test').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function startTest(role) {
+        currentRole = role;
+        currentQuestion = 0;
+        document.getElementById('roleSelection').classList.add('hidden');
+        document.getElementById('testContainer').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentRole][currentQuestion];
+        const progress = `Вопрос ${currentQuestion + 1}/2`;
+        document.getElementById('progress').textContent = progress;
+
+        // Update progress bars
+        const progressBars = document.querySelectorAll('.progress-fill');
+        if (currentQuestion === 0) {
+            progressBars[0].style.width = '50%';
+            progressBars[1].style.width = '0%';
+        } else {
+            progressBars[0].style.width = '100%';
+            progressBars[1].style.width = '50%';
+        }
+
+        let optionsHTML = '';
+        q.options.forEach((option, index) => {
+            optionsHTML += `
+                    <button onclick="checkAnswer(${index})" class="option-card w-full text-left p-5 mb-4 rounded-lg">
+                        <span class="text-gray-200">${option}</span>
+                    </button>
+                `;
+        });
+
+        document.getElementById('questionArea').innerHTML = `
+                <h3 class="text-xl font-semibold mb-6 text-white">${q.question}</h3>
+                <div id="optionsArea">${optionsHTML}</div>
+                <div id="feedback" class="hidden mt-6"></div>
+            `;
+    }
+
+    function checkAnswer(selected) {
+        const q = questions[currentRole][currentQuestion];
+        const optionCards = document.querySelectorAll('.option-card');
+        const feedbackDiv = document.getElementById('feedback');
+
+        optionCards.forEach(btn => btn.disabled = true);
+
+        if (selected === q.correct) {
+            optionCards[selected].classList.add('success-bg', 'text-white');
+            feedbackDiv.innerHTML = `
+                    <div class="p-6 bg-green-900/20 border border-green-500 text-green-400 rounded-lg">
+                        <p class="font-semibold text-lg mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Отлично! Правильный ответ
+                        </p>
+                        <p>${q.explanation}</p>
+                    </div>
+                `;
+        } else {
+            optionCards[selected].classList.add('error-bg', 'text-white');
+            optionCards[q.correct].classList.add('success-bg', 'text-white');
+            feedbackDiv.innerHTML = `
+                    <div class="p-6 bg-red-900/20 border border-red-500 text-red-400 rounded-lg">
+                        <p class="font-semibold text-lg mb-2 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Неправильно! Изучи объяснение
+                        </p>
+                        <p>${q.explanation}</p>
+                    </div>
+                `;
+        }
+
+        feedbackDiv.classList.remove('hidden');
+
+        setTimeout(() => {
+            feedbackDiv.innerHTML += `
+                    <button onclick="nextQuestion()" class="mt-6 btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                        Следующий вопрос →
+                    </button>
+                `;
+        }, 1000);
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < 2) {
+            showQuestion();
+        } else {
+            document.getElementById('questionArea').innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-green-600 rounded-full flex items-center justify-center text-white">
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4 text-white">Демо-тест пройден!</h3>
+                        <p class="text-lg text-gray-400 mb-8">Хочешь подготовиться к настоящему собеседованию?</p>
+                        <button onclick="document.getElementById('cta').scrollIntoView({ behavior: 'smooth' });" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                            Получить полный доступ →
+                        </button>
+                    </div>
+                `;
+
+            // Update progress to 100%
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                bar.style.width = '100%';
+            });
+        }
+    }
+
+    // Payment form handling
+    document.getElementById('cardNumber').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\s/g, '');
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+        e.target.value = formattedValue;
+    });
+
+    document.getElementById('expiry').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+            value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        }
+        e.target.value = value;
+    });
+
+    document.getElementById('cvc').addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D/g, '');
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Отправляем событие в Яндекс.Метрику
+        if (typeof ym !== 'undefined') {
+            ym(103196049, 'reachGoal', 'PAY_CLICK');
+            console.log('Событие PAY_CLICK отправлено в Яндекс.Метрику');
+        } else {
+            console.warn('Яндекс.Метрика не загружена');
+        }
+
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        const expiry = document.getElementById('expiry').value;
+        const cvc = document.getElementById('cvc').value;
+        const email = document.getElementById('email').value;
+
+        // Basic validation
+        if (cardNumber.length !== 16) {
+            showModal();
+            return;
+        }
+
+        if (!expiry.match(/^\d{2}\/\d{2}$/)) {
+            showModal();
+            return;
+        }
+
+        if (cvc.length !== 3) {
+            showModal();
+            return;
+        }
+
+        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            showModal();
+            return;
+        }
+
+        // Show error modal
+        showModal();
+    });
+
+    function showModal() {
+        document.getElementById('errorModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('errorModal').classList.add('hidden');
+    }
+</script>
+
+</body>
+</html>
